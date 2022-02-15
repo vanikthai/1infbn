@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row">
+        <div id="userset" data-user="<%= JSON.stringify(user.name) %>"></div>
+        <div class="box box-primary direct-chat direct-chat-primary">
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div id="mainchat" style="overflow-x: hidden" class="direct-chat-messages-main" >
+              <!-- <div style="overflow-y: scroll; height: 500px;"> -->
+                  <div class="card" style="width: 18rem;align-items: center;">
+                    <h1>ProFile</h1>
+                    <div class="card-body">
+                <img id="editprofilePicture" style="border-radius: 50%;" class="card-img-top" src="<%= user.name.picture%>">
+                <input type="file" name="setprofilepic" id="setprofilepic" style="display: none;"/>
+                <label for="setprofilepic" class="btn btn-box-tool">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                    class="bi bi-images"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    <path
+                      d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"
+                    />
+                  </svg>
+                </label>
+                
+                    <p class="card-text">
+                    <form class="d-flex" id="editusername">
+                        <input id="username" class="form-control me-2" value="<%= user.name.username%>" type="search">
+                        <button class="btn btn-primary btn-sm" type="submit">บันทึก</button>
+                    </form>
+                  </p>
+                </div>
+              </div>
+              <!-- <div class="direct-chat-contacts">
+              </div> -->
+          </div>
+      <!-- </div> -->
+  </div>
+  <%- include('./other/buttonbar.ejs')%>
+  </div> 
+  </div> 
+  <script type="module" src="/js/profile.js"></script>
+  

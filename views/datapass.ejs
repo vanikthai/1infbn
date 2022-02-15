@@ -1,0 +1,32 @@
+
+<div class="container-md">
+    <br />
+    <form action="/datakey" method="post">
+      <div class="mb-3">
+        <label for="tokenid" class="form-label">tokenid address</label>
+        <input
+          type="text"
+          class="form-control"
+          id="tokenid"
+          name="tokenid"
+          value="<%=data%>"
+        />
+        <div id="emailHelp" class="form-text">
+          We'll never share your key with anyone else.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          autocomplete="off"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+   
+  </div>
+  

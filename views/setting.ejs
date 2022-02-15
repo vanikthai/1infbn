@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="row">
+    <div id="userset" data-user="<%= JSON.stringify(user.name) %>"></div>
+    <div class="box box-primary direct-chat direct-chat-primary">
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div id="mainchat" class="direct-chat-messages-main">
+          <div style="overflow-y: scroll; height: 500px">
+            <div id="discrip"></div>
+            <div class="direct-chat-contacts">
+                <div id="app"></div>
+            </div> 
+          </div>
+        </div>
+      </div>
+      <%- include('./other/buttonbar.ejs')%>
+    </div>
+  </div>
+  <script type="module" src="/js/setting.js"></script>
+  <style>
+    .budget-tracker {
+      border-collapse: collapse;
+      /* min-width: 750px; */
+    }
+
+    .budget-tracker * {
+      font-family: sans-serif;
+    }
+
+    .budget-tracker th {
+      text-align: left;
+      padding: 10px 20px;
+      border-bottom: 2px solid #009578;
+    }
+
+    .budget-tracker td {
+      padding: 5px;
+    }
+
+    .input,
+    .delete-entry {
+      height: 30px;
+      font-size: 13px;
+      padding: 0 10px;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    .input {
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #bbbbbb;
+    }
+
+    .delete-entry {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      background: none;
+      color: red;
+      border: none;
+      border-radius: 50%;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .delete-entry:hover {
+      background: rgba(255, 0, 0, 0.1);
+    }
+
+    .controls,
+    .summary {
+      text-align: right;
+    }
+  </style>
+</div>

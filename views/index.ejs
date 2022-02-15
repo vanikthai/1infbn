@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div id="userset" data-user="<%= JSON.stringify(user.name) %>"></div>
+    <div class="box box-primary direct-chat direct-chat-primary">
+      <!-- /.box-header -->
+      <div class="box-body">
+          <div id="mainchat" class="direct-chat-messages-main">
+              <div style="overflow-y: scroll; height: 500px">
+                <ws-main id="showmainpage"></ws-main>
+                <div class="direct-chat-contacts">
+                    <%- include('./other/mainpageSend.ejs')%>
+                    <div id="dislist"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('./other/buttonbar.ejs')%>
+    <%- include('./other/popup.ejs')%>
+    </div>
+  </div>
+</div>
+<script type="module" src="/js/maimpage.js"></script>

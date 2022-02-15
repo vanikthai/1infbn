@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="row"> 
+      <div>
+        <div id="userset" data-user="<%= JSON.stringify(user.name) %>"></div>
+  
+        <div class="box box-primary direct-chat direct-chat-primary">
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div id="mainchat" class="direct-chat-messages">
+              <div class="direct-chat-contacts">
+                <%- include('./other/headerUsers.ejs')%>
+                <ws-users id="showusers"></ws-users>
+              </div>
+              <ws-chat id="showmsg"></ws-chat>
+            </div>
+            <%- include('./other/boxfooter.ejs')%> <%-
+            include('./other/headderbox.ejs')%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+  <style>
+    .direct-chat-img {
+      border-radius: 50%;
+      float: left;
+      width: 40px;
+      height: 40px;
+    }
+    .right .direct-chat-img {
+      float: right;
+    }
+    #status {
+      position: fixed;
+      width: 100%;
+      font: bold 1em sans-serif;
+      color: #fff;
+      padding: 0.5em;
+    }
+  
+    #log {
+      padding: 2.5em 0.5em 0.5em;
+      font: 1em sans-serif;
+    }
+  
+    .online {
+      background: green;
+    }
+  
+    .offline {
+      background: red;
+    }
+  </style>
+  
+  

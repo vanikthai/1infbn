@@ -1,4 +1,3 @@
-// import IDB from "../controls/indexdb_class.js";
 import cropImage from "../controls/imagesize.js";
 import datetime from "../controls/datetime.js";
 import uuid from "../controls/uuid.js";
@@ -8,7 +7,6 @@ import { id, idb, username, email, picture } from "./theuser.js";
 export default () => {
   const dislist = new DiscripList("#dislist");
   const showmsg = document.getElementById("showmainpage");
-  const mainchat = document.getElementById("mainchat");
   const pictrueSend = [];
   const cerrentRecord = {
     value: 0,
@@ -25,6 +23,7 @@ export default () => {
 
   socket.on("connect", () => {
     connecedstart();
+   console.log(datetime())
   });
   socket.on("mainpage", (message) => {
     // console.log(message.insertId);
@@ -37,6 +36,7 @@ export default () => {
   socket.on("user_connected", (user) => {
     // console.log(user);
   });
+  
   socket.on("server_msg", (message) => {
     switch (message.res) {
       case "delmainid":
@@ -57,13 +57,13 @@ export default () => {
 
   socket.on("mainpagelast", (message) => {
     message.forEach((data, index) => {
-      // console.log(data);
       setTimeout(() => {
         cerrentRecord.value = data.id_main;
         try {
           let msg = JSON.parse(data.message);
           let paylaod = {
             index: data.id_main,
+            vlock: data.vlock,
             ...msg,
           };
           showmsg.rmsg = JSON.stringify(paylaod);
@@ -87,14 +87,16 @@ export default () => {
     } else {
       noitfi(msg.message, msg.from);
     }
-    //  mainchat.scrollLeft = 0;
   });
+
   socket.on("server_error", (error) => {
     console.log(error);
   });
+
   socket.on("userLeft", (user) => {
     console.log("userLeft" + user);
   });
+
   socket.on("disconnect", () => {
     socketdisconnec();
   });
@@ -138,7 +140,6 @@ export default () => {
 
   document.getElementById("btnSetPass").addEventListener("submit", (e) => {
     e.preventDefault();
-   // console.log("setPassword to loging shaire");
     let passtext = document.getElementById("setPass");
     if (passtext.value === "") return;
     let payload = {
@@ -149,6 +150,15 @@ export default () => {
     passtext.value=""
   });
 
+  document.getElementById("bnunset").addEventListener("click", (e) => {
+    e.preventDefault();
+    let passtext = document.getElementById("setPass");
+    let payload = {
+        id_main: passtext.dataset.id,
+        password: "***",
+    }
+    socket.emit("setPassShire", payload);
+  });
   const chatmsg = document
     .getElementById("showmainpage")
     .shadowRoot.getElementById("chatmessages");
@@ -183,7 +193,6 @@ export default () => {
   });
 
   document.getElementById("formselect").addEventListener("change", () => {
-    //  console.log("formselect click");
     showmsg.vclear = "true";
     loadlastmainpageDiscrip();
   });
@@ -213,6 +222,7 @@ export default () => {
     const Android = /Android/.test(navigator.userAgent);
     console.log(Android);
   }
+
   function resizetext(e) {
     e.currentTarget.setAttribute(
       "style",
@@ -328,13 +338,19 @@ export default () => {
     socket.emit("lastmainpage", sql);
   }
 
-  function sendClientMessage() {
+ async function sendClientMessage() {
     const message = document.getElementById("message");
     if (message.value === "") return;
-    const payload = sendMessage(message.value);
-    sendSelecter(payload);
+    const payload =  sendMessage(message.value);
+     sendSelecter(payload);
     message.value = "";
+    
+    // pictrueSend.forEach((el,index) => {
+    //     pictrueSend.splice(index, 1);
+    // });
+
     pictrueSend.splice(0, 1);
+
     document.getElementById("showpicture").innerHTML = "";
   }
   function showtose(msg, usname) {
@@ -350,7 +366,7 @@ export default () => {
 
   function sendMessage(msg) {
     let getpic = [];
-    const id_discrip = document.getElementById("formselect").value || 3;
+    const id_discrip = document.getElementById("formselect").value || 1;
     pictrueSend.forEach((pic) => {
       getpic.push(pic);
     });

@@ -10,6 +10,23 @@ body{
     --radius-2:10px;
     --shadow-2: gray;
 }
+::-webkit-scrollbar {
+    width: 5px;
+    height: 1px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: #eee; 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
 .media-element {
     display: grid;
     grid-template-rows: min-content;

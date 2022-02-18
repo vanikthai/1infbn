@@ -1,0 +1,55 @@
+<div class="container-md">
+  <br /><br /><br />
+  <div id="userset" data-user="<%= JSON.stringify(user.name) %>"></div>
+  <div id="data" data-message="<%=JSON.stringify(data)%>"></div>
+  <form id="btnSetPass">
+    <div class="row mb-3">
+      <div id="intime"></div>
+      <img
+        id="userpic"
+        class="col-sm-2 col-form-label"
+        src=".."
+        style="width: 100px; height: 100px"
+      />
+      <div class="col-sm-10">
+        <h3 id="title"></h3>
+        <h6>"[ตั้งค่ารัหสผ่านใหม่]"</h6>
+        <input
+          type="text"
+          class="form-control"
+          id="tokenid"
+          name="tokenid"
+          value="<%=data.token%>"
+        />
+        <br />
+        <input
+          data-id="<%=data.id_main%>"
+          type="password"
+          class="form-control"
+          id="setPass"
+          name="password"
+          autocomplete="off"
+        />
+        <br />
+        <button type="submit" id="bnset" class="btn btn-primary" style="float: right">
+          ตกลง
+        </button>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-10">
+        <button
+         type="button"
+          id="bnunset"
+          class="btn btn-primary"
+          role="button"
+          data-bs-toggle="button"
+        >
+          ยกเลิกรหัสผ่าน
+      </button>
+      
+      </div>
+    </div>
+  </form>
+</div>
+<script type="module" src="/js/resetpass.js"></script>

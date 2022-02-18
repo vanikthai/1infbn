@@ -13,7 +13,7 @@
     ></div>
   </div>
   <form id="formsendmsg">
-    <div class="input-group">
+    <div class="mb-3">
       <textarea
         type="text"
         name="message"
@@ -23,7 +23,9 @@
         class="form-control"
         rows="1"
       ></textarea>
-      <span class="input-group-btn">
+    </div>
+    <div class="mb-3" style="float: right;">
+       <span class="input-group-btn">
         <button type="submit" class="btn btn-primary btn-flat">
           Send
           <span
@@ -31,7 +33,7 @@
             role="status"
             style="display: none"
             aria-hidden="true"
-          ></span>
+        ></span>
         </button>
         <button
           type="button"
@@ -40,8 +42,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="30"
+            height="30"
             fill="currentColor"
             class="bi bi-arrow-counterclockwise"
             viewBox="0 0 16 16"
@@ -55,7 +57,7 @@
             />
           </svg>
         </button>
-      </span>
+      <!-- </span> -->
     </div>
   </form>
   <input
@@ -76,8 +78,8 @@
     ></span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      width="30"
+      height="30"
       fill="currentColor"
       class="bi bi-images"
       viewBox="0 0 16 16"

@@ -15,7 +15,7 @@ export default class Distription {
             <table class="budget-tracker">
                 <thead>
                     <tr>
-                        <th>Description</th>
+                        <th>รายการ</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -23,7 +23,7 @@ export default class Distription {
                 <tbody>
                     <tr>
                         <td colspan="2" class="controls">
-                            <button type="button" class="new-entry">New Entry</button>
+                            <button type="button" class="new-entry">เพิ่ม</button>
                         </td>
                     </tr>
                 </tbody>
@@ -37,7 +37,7 @@ export default class Distription {
             <tr>
                 <td>
                 <input id="discrip" class="input input-description" type="text" placeholder="Add a Description">
-                <input id="keyword" class="input input-description" type="text" placeholder="Add a Description keys">
+                <input id="keyword" style="display:none" class="input input-description" type="text" placeholder="Add a Description keys">
                 </td>
                 <td>
                     <button type="button" id="saveentry" class="delete-entry">✔</button>
@@ -51,7 +51,7 @@ export default class Distription {
 
   load(entries) {
     for (const entry of entries) {
-      console.log(entry);
+    //  console.log(entry);
       this.addEntry(entry);
     }
     //  this.finddistripfromdb()
@@ -65,7 +65,7 @@ export default class Distription {
 
     row.querySelector("#discrip").dataset.id = entry.id_discrip || 0;
     row.querySelector("#discrip").value = entry.discrip || "";
-    row.querySelector("#keyword").value = entry.keyword || "";
+   // row.querySelector("#keyword").value = entry.keyword || "";
 
     row.querySelectorAll(".input").forEach((input) => {
       input.addEventListener("change", (e) => {
@@ -85,7 +85,7 @@ export default class Distription {
 
     row.querySelector("#discrip").dataset.id = entry.id_discrip || 0;
     row.querySelector("#discrip").value = entry.discrip || "";
-    row.querySelector("#keyword").value = entry.keyword || "";
+  //  row.querySelector("#keyword").value = entry.keyword || "";
 
     row.querySelector("#deleteentry").addEventListener("click", (e) => {
       this.onDeleteEntryBtnClick(e);
@@ -98,22 +98,22 @@ export default class Distription {
   save(e) {
     const row = e.target.closest("tr");
     const discrip = row.querySelector("#discrip").value;
-    const keyword = row.querySelector("#keyword").value;
+   // const keyword = row.querySelector("#keyword").value;
     const payload = {
       discrip,
-      keyword,
+      keyword: "",
     };
-    console.log(payload);
+   // console.log(payload);
     socket.emit("adddiscrip", payload);
   }
   update(e) {
     const row = e.target.closest("tr");
     row.querySelector("#discrip").style = "color:green";
-    row.querySelector("#keyword").style = "color:green";
+  //  row.querySelector("#keyword").style = "color:green";
     // row.remove()
     const id = row.querySelector("#discrip").dataset.id || 0;
     const discrip = row.querySelector("#discrip").value;
-    const keyword = row.querySelector("#keyword").value;
+  //  const keyword = row.querySelector("#keyword").value;
     // var word = key.split(',');
     if (discrip === "") return;
     row.querySelector("#saveentry").style = "color:green";

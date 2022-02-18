@@ -2,7 +2,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img id="profilePicture" class="direct-chat-img" class="d-inline-block align-text-top" src="<%= user.name.picture%>">
+            <img id="profilePicture" style="width: 40px;border-radius: 40px;" class="direct-chat-img" class="d-inline-block align-text-top" src="<%= user.name.picture%>">
         </a>
         <h4><%= user.name.username%></h4>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,19 +11,19 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
+            <a class="nav-link active" aria-current="page" href="/">หน้าหลัก</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/chat">Chat</a>
+            <a class="nav-link" href="/chat">พูดคุย</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/profile">profile</a>
+            <a class="nav-link" href="/profile">ข้อมูลส่วนตัว</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/setting">setting</a>
+            <a class="nav-link" href="/setting">ตั้งค่า</a>
           </li>
         </ul>
-        <a class="nav-link" href="/logout">logout</a>
+        <a class="nav-link" href="/logout">ออก</a>
       </div>
     </div>
   </nav>

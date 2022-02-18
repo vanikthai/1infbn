@@ -72,8 +72,8 @@ class formMain extends HTMLElement {
   attributeChangedCallback(prop, oldVal, newVal) {
     if (prop === "") this.render();
     if (prop === "vclear") this.clearMsg();
-    if (prop === "rmsg") this.addmsgRight(this.rmsg);
-    if (prop === "lmsg") this.addmsgLeft(this.lmsg);
+    if (prop === "rmsg") this.serverLoadMessage(this.rmsg);
+    if (prop === "lmsg") this.addMessageFromServer(this.lmsg);
     if (prop === "delindex") this.deleteRecord(this.delindex);
     if (prop === "chair") this.toedit();
     if (prop === "tokenshair") this.toShair();
@@ -84,19 +84,25 @@ class formMain extends HTMLElement {
     let message = document.getElementById("message-text");
     let setPass = document.getElementById("setPass");
     let btnSetPass = document.getElementById("btnSetPass");
+    let shireLine = document.getElementById("shireLine");
     let ModalPopup = new bootstrap.Modal(exampleModal, {});
     let modalTitle = exampleModal.querySelector(".modal-title");
-    modalTitle.textContent = "Shaire Messaage";
+   // modalTitle.innerHTML = "ส่งต่อ";
+  
     let payload = JSON.parse(this.tokenshair);
+
+    modalTitle.innerHTML = "ส่งต่อ " + this.btnShair(payload.vlock)
+
     if (payload.ownlist) {
-      setPass.style.display = "inline";
+      setPass.style.display = "block";
       setPass.dataset.id = payload.id;
-      btnSetPass.style.display = "inline";
+      btnSetPass.style.display = "block";
       document.getElementById("bnset").className="btn btn-primary"
     } else {
       setPass.style.display = "none";
       btnSetPass.style.display = "none";
-    }
+    } 
+    shireLine.href = `https://social-plugins.line.me/lineit/share?url=https://www.1inf.vanikthai.com/data/${payload.index}`
     message.value = `https://www.1inf.vanikthai.com/data/${payload.index}`;
     ModalPopup.show();
   }
@@ -127,32 +133,34 @@ class formMain extends HTMLElement {
       }
     });
   }
-  ///////////////////////////////////////////////addmsgRight/////////////////////
-  addmsgRight(payload) {
-    const msg = JSON.parse(payload);
-    const chatMsg = this.shadow.getElementById("chatmessages");
-    const divR = document.createElement("DIV");
+  ///////////////////////////////////////////////serverLoadMessage/////////////////////
+ innerMessage(username,time,picture,message) {
+     return`
+     <div class="direct-chat-info clearfix">
+     <span class="direct-chat-name pull-left">${username}</span>
+     <span class="direct-chat-timestamp pull-right">${time}</span>
+     </div> 
+     <img class="direct-chat-img" src="${picture}">
+     <div style="margin-left:50px;white-space:pre-wrap;">${decodeURIComponent(message)}</div>
+     `
+ }
+ 
+  serverLoadMessage(payload) {
+    let msg = JSON.parse(payload);
+    let chatMsg = this.shadow.getElementById("chatmessages");
+    let divR = document.createElement("DIV");
     divR.className = "direct-chat-msg";
-    divR.innerHTML = `
-    <div class="direct-chat-info clearfix">
-    <span class="direct-chat-name pull-left">${msg.from.username}</span>
-    <span class="direct-chat-timestamp pull-right">${msg.time}</span>
-    </div> 
-    <img class="direct-chat-img" src="${msg.from.picture}">
-    <div style="margin-left:50px;white-space:pre-wrap;">${decodeURIComponent(
-      msg.message
-    )}</div>
-    `;
+    divR.innerHTML = this.innerMessage(msg.from.username,msg.time,msg.from.picture,msg.message) ;
 
-    const btndel = this.createBtnDel(msg.index, msg.from);
-    const btnEdit = this.createBtnEdit(msg.message);
-    const ownlist = id === msg.from.uid ? true : false;
-    const btnShair = this.createBtnShair(msg.id, msg.index, ownlist);
-    const picfram = document.createElement("div");
+    let btndel = this.createBtnDel(msg.index, msg.from);
+    let btnEdit = this.createBtnEdit(msg.message);
+    let ownlist = id === msg.from.uid ? true : false;
+    let btnShair = this.createBtnShair(msg.id, msg.index, ownlist,msg.vlock);
+    let picfram = document.createElement("div");
     picfram.className = "media-scroller snaps-inline";
     if (msg.pictrueSend.length > 0) {
       msg.pictrueSend.forEach((element) => {
-        const pic = document.createElement("div");
+        let pic = document.createElement("div");
         pic.className = "media-element";
         pic.innerHTML = `
           <img src="${element}" >
@@ -162,38 +170,29 @@ class formMain extends HTMLElement {
       divR.appendChild(picfram);
     }
 
-    if (id === msg.from.uid) {
-      divR.appendChild(btnEdit);
-      divR.appendChild(btndel);
-    //  divR.appendChild(btnShair);
+    if (ownlist) {
+        divR.appendChild(btndel);
     }
+    divR.appendChild(btnEdit);
     divR.appendChild(btnShair);
     chatMsg.appendChild(divR);
   }
-  ////////////////////////////////////////////addmsgLeft/////////////////////////
-  addmsgLeft(payload) {
-    const msg = JSON.parse(payload);
-    const chatMsg = this.shadow.getElementById("chatmessages");
-    const divR = document.createElement("DIV");
+  ////////////////////////////////////////////addMessageFromServer/////////////////////////
+  addMessageFromServer(payload) {
+    let msg = JSON.parse(payload);
+    let chatMsg = this.shadow.getElementById("chatmessages");
+    let divR = document.createElement("DIV");
     divR.className = "direct-chat-msg";
-    divR.innerHTML = `
-    <div class="direct-chat-info clearfix">
-    <span class="direct-chat-name pull-left">${msg.from.username}</span>
-    <span class="direct-chat-timestamp pull-right">${msg.time}</span>
-    </div> 
-    <img class="direct-chat-img" src="${msg.from.picture}">
-    <div style="margin-left:50px;white-space:pre-wrap;">
-    ${decodeURIComponent(msg.message)}</div>
-    `;
+    divR.innerHTML = this.innerMessage(msg.from.username,msg.time,msg.from.picture,msg.message) ;
 
-    const btndel = this.createBtnDel(msg.index, msg.from);
-    const btnEdit = this.createBtnEdit(msg.message);
-    const btnShair = this.createBtnShair(msg.id, msg.index, true);
-    const picfram = document.createElement("div");
+    let btndel = this.createBtnDel(msg.index, msg.from);
+    let btnEdit = this.createBtnEdit(msg.message);
+    let btnShair = this.createBtnShair(msg.id, msg.index, true);
+    let picfram = document.createElement("div");
     picfram.className = "media-scroller snaps-inline";
     if (msg.pictrueSend.length > 0) {
       msg.pictrueSend.forEach((element) => {
-        const pic = document.createElement("div");
+        let pic = document.createElement("div");
         pic.className = "media-element";
         pic.innerHTML = `
             <img src="${element}" >
@@ -211,8 +210,8 @@ class formMain extends HTMLElement {
   }
 
   createBtnDel(index, from) {
-    const btndel = document.createElement("SPAN");
-    btndel.style = "position:relative;float:right";
+    let btndel = document.createElement("SPAN");
+    btndel.style = "position:relative;float:left";
     btndel.className = "btn btn-box-tool";
     btndel.dataset.index = JSON.stringify({
       idDel: index,
@@ -222,7 +221,7 @@ class formMain extends HTMLElement {
       let ondel = JSON.parse(e.currentTarget.dataset.index);
       if (id === ondel.from) {
         this.delindex = await ondel.idDel;
-        e.target.parentElement.parentElement.innerHTML = "[ลบแล้ว]";
+        e.target.parentElement.parentElement.innerHTML = "";
       } else {
         console.log("deffent user Can't deleting...");
       }
@@ -231,26 +230,27 @@ class formMain extends HTMLElement {
     return btndel;
   }
 
-  createBtnShair(index, id, ownlist) {
-    const btnshair = document.createElement("SPAN");
+  createBtnShair(index, id, ownlist,vlock) {
+    let btnshair = document.createElement("SPAN");
     btnshair.style = "position:relative;float:right";
     btnshair.className = "btn btn-box-tool";
     let payload = {
       index,
       id,
       ownlist,
+      vlock,
     };
     btnshair.dataset.index = JSON.stringify(payload);
     btnshair.addEventListener("click", async (e) => {
       this.tokenshair = e.currentTarget.dataset.index;
     });
-    btnshair.innerHTML = this.btnShair();
+    btnshair.innerHTML = this.btnShair(vlock);
     return btnshair;
   }
 
   btnedit() {
     return `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
        </svg>
@@ -258,19 +258,30 @@ class formMain extends HTMLElement {
   }
   btnDelete() {
     return `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
       <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
       <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
     </svg>
       `;
   }
-  btnShair() {
-    return `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-check" viewBox="0 0 16 16">
-      <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z"/>
-      <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z"/>
-     </svg>
-      `;
+  btnShair(vlock) {
+      if(vlock==="pass") {
+        return `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-send-check" viewBox="0 0 16 16">
+        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z"/>
+        <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z"/>
+       </svg>
+       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+       <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+       </svg>
+        `;
+      }
+        return `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-send-check" viewBox="0 0 16 16">
+        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z"/>
+        <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z"/>
+        </svg>
+        `;
   }
   msgalert(title = "", msg = "") {
     return `
@@ -281,8 +292,8 @@ class formMain extends HTMLElement {
       `;
   }
   createBtnEdit(message) {
-    const btchair = document.createElement("SPAN");
-    btchair.style = "position:relative;float:right";
+    let btchair = document.createElement("SPAN");
+    btchair.style = "position:relative;float:left";
     btchair.className = "btn btn-box-tool";
     btchair.dataset.data = message;
     btchair.addEventListener("click", (e) => {
@@ -292,8 +303,8 @@ class formMain extends HTMLElement {
     return btchair;
   }
   addcontacts(message) {
-    const chatMsg = this.shadow.getElementById("chatmessages");
-    const divR = document.createElement("DIV");
+    let chatMsg = this.shadow.getElementById("chatmessages");
+    let divR = document.createElement("DIV");
     divR.className = "direct-chat-contacts";
     divR.innerHTML = `
         <ul class="contacts-list">
@@ -323,7 +334,7 @@ class formMain extends HTMLElement {
   }
 
   loaddata() {
-    const chatMsg = this.shadow.getElementById("chatmessages");
+    let chatMsg = this.shadow.getElementById("chatmessages");
     chatMsg.addEventListener("scroll", (e) => {
       let stop = e.currentTarget.scrollTop + 500;
       let sheitht = e.currentTarget.scrollHeight;

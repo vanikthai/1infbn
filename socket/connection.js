@@ -3,7 +3,6 @@ const rooms = [];
 const mysql = require("../controlers/dbtable.js");
 const passhash = require("password-hash");
 
-// const {ensureAuthenticated} = require('../controlers/auth.js')
 module.exports = (socket) => {
   socket.on("message", (msg) => {
     addmessage(msg);
@@ -43,65 +42,72 @@ module.exports = (socket) => {
   });
 
   socket.on("lastmainpage", (sql) => {
-    loadLastMainpage(sql); 
+    loadLastMainpage(sql);
   });
 
   socket.on("updatusersetting", (payload) => {
-    updatusersetting(payload)
+    updatusersetting(payload);
   });
   socket.on("updatediscrip", (payload) => {
-    updatediscrip(payload)
+    updatediscrip(payload);
   });
-  
+
   socket.on("adddiscrip", (payload) => {
-    adddiscrip(payload)
+    adddiscrip(payload);
   });
 
   socket.on("delmainid", (payload) => {
-    delmainid(payload)
+    delmainid(payload);
   });
 
   socket.on("setPassShire", (payload) => {
-    setPassShire(payload)
+    setPassShire(payload);
   });
 
   //////////////////////////////////////////////////////////
 
-function setPassShire(payload) {
-    let sql=""
+  function setPassShire(payload) {
+    let sql = "";
 
-    if(payload.password==="***") {
-        sql = `UPDATE mainpage SET vlock='none', password='' WHERE id_main = '${payload.id_main}'`;
-
+    if (payload.password === "***") {
+      sql = `UPDATE mainpage SET vlock='allow', password='' WHERE id_main = '${payload.id_main}'`;
     } else {
-        let hash = passhash.generate(payload.password);
-        sql = `UPDATE mainpage SET vlock='pass', password='${hash}' WHERE id_main = '${payload.id_main}'`;
+      let hash = passhash.generate(payload.password);
+      sql = `UPDATE mainpage SET vlock='pass', password='${hash}' WHERE id_main = '${payload.id_main}'`;
     }
 
     mysql(sql)
-    .then((res) => {
-        if(payload.password==="***") {
-            socket.emit("server_msg", { res: "repassShaire", msg: "[server] cancle password shaire Cuccess." });
+      .then((res) => {
+        if (payload.password === "***") {
+          socket.emit("server_msg", {
+            res: "repassShaire",
+            msg: "[server] cancle password shaire Cuccess.",
+          });
         } else {
-            socket.emit("server_msg", { res: "passShaire", msg: "[server] set password shaire Cuccess." });
-
+          socket.emit("server_msg", {
+            res: "passShaire",
+            msg: "[server] set password shaire Cuccess.",
+          });
         }
-    })
-    .catch((err) => {
+      })
+      .catch((err) => {
         socket.emit("server_msg", { res: "error", msg: sql });
-    });
-}
+      });
+  }
 
-function delmainid(id) {
+  function delmainid(id) {
     let sql = `DELETE FROM mainpage WHERE id_main = ${id};`;
     mysql(sql)
-    .then((res) => {
-        socket.emit("server_msg", { res: "delmainid", msg: "[server] delete 1 row from mainpage Cuccess." });
-    })
-    .catch((err) => {
+      .then((res) => {
+        socket.emit("server_msg", {
+          res: "delmainid",
+          msg: "[server] delete 1 row from mainpage Cuccess.",
+        });
+      })
+      .catch((err) => {
         socket.emit("server_msg", { res: "error", msg: sql });
-    });
-}
+      });
+  }
 
   function loadLastMainpage(sql) {
     mysql(sql)
@@ -112,6 +118,7 @@ function delmainid(id) {
         socket.emit("server_error", err + sql);
       });
   }
+
   function addtomainpage(msg) {
     let payload = JSON.stringify(msg);
     let sql = `INSERT INTO mainpage (id_discrip,token,message) VALUE ('${msg.id_discrip}','${msg.id}','${payload}')`;
@@ -124,12 +131,12 @@ function delmainid(id) {
         socket.emit("server_error", err + sql);
       });
   }
+  
   function adddiscrip(discrip) {
-   // let payload = JSON.stringify(msg);
     let sql = `INSERT INTO discrips (discrip,keyword) VALUE ('${discrip.discrip}','${discrip.keyword}')`;
     mysql(sql)
       .then((res) => {
-        socket.emit("discription", {res: "discription", msg: res});
+        socket.emit("discription", { res: "discription", msg: res });
       })
       .catch((err) => {
         socket.emit("server_msg", { res: err, msg: sql });

@@ -25,14 +25,12 @@ route.get("/setting",ensureAdmin, (req, res) => {
 });
 
 route.get("/data/:key", require("./data.js"));
+route.get("/resetpass/:key",ensureAuthenticated, require("./resetpass.js"));
 route.get('/logout', require("./logout.js"))
 route.post("/datakey", require("./datakey.js"));
 route.post("/login", require("./login.js"));
 route.post("/register", require("./register.js"));
 route.post("/setting/drop", require("./tabledrop.js"));
 route.post("/setting/create", require("./tablecreate.js"));
-
-// route.ws('/chat', require('./ws/wschat.js'))
-
 
 module.exports = route;

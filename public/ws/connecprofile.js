@@ -28,6 +28,11 @@ export default () => {
   });
 
   ///////////////uploadpic/////////////////////////
+  
+  document.getElementById("movehome").addEventListener("click", (e) => {
+    window.location.href = "https://www.1inf.vanikthai.com";
+ });
+
   document.getElementById("editusername").addEventListener("submit", (e) => {
     e.preventDefault();
     const username = e.currentTarget.querySelector("input").value;

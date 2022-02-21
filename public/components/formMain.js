@@ -1,5 +1,5 @@
 import chatCss from "../css/c_chat.js";
-import { id } from "../ws/theuser.js";
+import { id,kind } from "../ws/theuser.js";
 import socket from "../ws/socket.js";
 
 class formMain extends HTMLElement {
@@ -170,7 +170,7 @@ class formMain extends HTMLElement {
       divR.appendChild(picfram);
     }
 
-    if (ownlist) {
+    if (ownlist||kind==="admin") {
         divR.appendChild(btndel);
     }
     divR.appendChild(btnEdit);
@@ -219,9 +219,11 @@ class formMain extends HTMLElement {
     });
     btndel.addEventListener("click", async (e) => {
       let ondel = JSON.parse(e.currentTarget.dataset.index);
-      if (id === ondel.from) {
-        this.delindex = await ondel.idDel;
-        e.target.parentElement.parentElement.innerHTML = "";
+      if (id === ondel.from||kind==="admin") {
+        if (confirm('ต้องการลบข้อมูลหรือไม่?')) {
+            this.delindex = await ondel.idDel;
+            e.target.parentElement.parentElement.innerHTML = "";
+          }
       } else {
         console.log("deffent user Can't deleting...");
       }

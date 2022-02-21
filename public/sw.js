@@ -29,8 +29,9 @@ self.addEventListener('fetch', function (event) {
 })
 
 self.addEventListener('push', e => {
-  const data = e.data.json()
-  console.log(data)
+  
+  const data = e.data
+  console.log(data) 
   self.registration.showNotification(data.title, {
     icon: '/images/favicon-128x128.png',
     body: data.message

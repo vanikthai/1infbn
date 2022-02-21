@@ -125,7 +125,12 @@ module.exports = (socket) => {
     mysql(sql)
       .then((res) => {
         socket.emit("mainpage", res);
-        socket.broadcast.emit("mainserver", msg);
+        let payload = {
+            index: res.insertId,
+            vlock: "allow",
+            ...msg 
+        }
+        socket.broadcast.emit("mainserver", payload);
       })
       .catch((err) => {
         socket.emit("server_error", err + sql);
@@ -256,7 +261,7 @@ module.exports = (socket) => {
   }
 
   function updatusersetting(payload) {
-    let sql = `UPDATE users SET kind='${payload.kind}', allow='${payload.allow}' WHERE id_user = '${payload.id}'`;
+    let sql = `UPDATE users SET kind='${payload.kind}', allow='${payload.allow}', updateby='${payload.updateby}' WHERE id_user = '${payload.id}'`;
     mysql(sql)
       .then((res) => {
         socket.emit("server_msg", {

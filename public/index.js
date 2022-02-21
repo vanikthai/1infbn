@@ -5,10 +5,10 @@ window.addEventListener("load", function () {
 
   }
   function OnlineStatus(event) {
-    window.location.href = "https://www.1inf.vanikthai.com";
     window.setTimeout(() => {
-      window.location.reload(true); 
-      alert("reload");
+      window.location.href = "https://www.1inf.vanikthai.com";
+     // window.location.reload(true);  
+     // alert("reload");
     }, 200);
   }
  // window.addEventListener("online", OnlineStatus);
@@ -39,18 +39,6 @@ function settingStart() {
     });
   }
 }
-(function () {
-  if (typeof EventTarget !== "undefined") {
-    let func = EventTarget.prototype.addEventListener;
-    EventTarget.prototype.addEventListener = function (type, fn, capture) {
-      this.func = func;
-      if (typeof capture !== "boolean") {
-        capture = capture || {};
-        capture.passive = false;
-      }
-      this.func(type, fn, capture);
-    };
-  }
-})();
+
 
 

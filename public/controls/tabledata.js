@@ -1,4 +1,6 @@
 import socket from "../ws/socket.js";
+import { id as uid, username as vname, picture } from "../ws/theuser.js";
+import datetime from "../controls/datetime.js";
 export default class BudgetTracker {
     constructor(querySelectorString) {
         this.root = document.querySelector(querySelectorString);
@@ -42,6 +44,9 @@ export default class BudgetTracker {
                         <option value="allow">allow</option>
                     </select>
                 </td>
+                <td>
+                <div id="updateby" >No update </div
+                </td>
             </tr>
         `;
     }
@@ -56,8 +61,14 @@ export default class BudgetTracker {
     addEntry(entry = {}) {
 
         this.root.querySelector(".entries").insertAdjacentHTML("beforeend", BudgetTracker.entryHtml());
-        const row = this.root.querySelector(".entries tr:last-of-type");
-
+        let row = this.root.querySelector(".entries tr:last-of-type");
+        if(entry.updateby) {
+               let updateby =  JSON.parse(entry.updateby)
+               let msg = `${updateby.username}: ${updateby.time}`
+               row.querySelector("#updateby").innerHTML =  msg || "none";
+              
+        }
+      
         row.querySelector("#username").innerHTML = entry.username || "";
         row.querySelector("#username").dataset.id = entry.id_user || 0;
         row.querySelector("#kind").value = entry.kind || "user";
@@ -71,15 +82,24 @@ export default class BudgetTracker {
     }
 
     save(e) {
-    const row = e.target.closest("tr"); 
-    // row.remove()
-    const id = row.querySelector("#username").dataset.id
-    const kind = row.querySelector("#kind").value
-    const allow = row.querySelector("#allow").value
-    const payload = {
+    let row = e.target.closest("tr"); 
+    let id = row.querySelector("#username").dataset.id
+    let kind = row.querySelector("#kind").value
+    let allow = row.querySelector("#allow").value
+    let user = {
+        uid, 
+        username: vname,
+        picture,
+        time: datetime(),
+        send: function() {
+            return JSON.stringify(this)
+        } 
+    }
+    let payload = {
         id,
         kind,
-        allow
+        allow,
+        updateby:  user.send()
     }
     socket.emit("updatusersetting", payload);
     }

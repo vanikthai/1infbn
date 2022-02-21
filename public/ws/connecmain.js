@@ -26,15 +26,16 @@ export default () => {
    console.log(datetime())
   });
   socket.on("mainpage", (message) => {
-    // console.log(message.insertId);
     let payload = {
       index: message.insertId,
       ...newMessage.value,
+      get: function() {
+        return JSON.stringify(this) 
+      }
     };
-    showmsg.lmsg = JSON.stringify(payload);
+    showmsg.lmsg = payload.get();
   });
   socket.on("user_connected", (user) => {
-    // console.log(user);
   });
   
   socket.on("server_msg", (message) => {
@@ -263,6 +264,7 @@ export default () => {
       setTimeout(postimage(this.files[i], i, totalpic), i * 1000);
     }
   }
+  
   function postimage(file, index, total) {
     const reader = new FileReader();
     reader.addEventListener(
@@ -344,11 +346,10 @@ export default () => {
     const payload =  sendMessage(message.value);
      sendSelecter(payload);
     message.value = "";
+     pictrueSend.forEach((el,index) => {
+         pictrueSend.splice(index, 1);
+     });
     
-    // pictrueSend.forEach((el,index) => {
-    //     pictrueSend.splice(index, 1);
-    // });
-
     pictrueSend.splice(0, 1);
 
     document.getElementById("showpicture").innerHTML = "";

@@ -5,7 +5,7 @@
           <!-- /.box-header -->
           <div class="box-body">
             <div id="mainchat" style="overflow-x: hidden" class="direct-chat-messages-main" >
-              <!-- <div style="overflow-y: scroll; height: 500px;"> -->
+              <div style="overflow-y: scroll; height: 500px;">
                   <div class="card" style="width: 18rem;align-items: center;">
                     <h1>ProFile</h1>
                     <div class="card-body">
@@ -32,11 +32,26 @@
                         <input id="username" class="form-control me-2" value="<%= user.name.username%>" type="search">
                         <button class="btn btn-primary btn-sm" type="submit">บันทึก</button>
                     </form>
+                    
                   </p>
+                  <form id="editpass">
+                    <div class="mb-3">
+                      <label for="epass1" class="form-label">รหัสผ่านเก่า</label>
+                      <input type="password" autocomplete="off" class="form-control" id="epass1" required aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                      <label for="epass2" class="form-label">รัหผ่านใหม่</label>
+                      <input type="password" autocomplete="off" class="form-control" id="epass2" required >
+                    </div>
+                    <button type="submit" class="btn btn-primary">เปลี่ยนรหัสผ่าน</button>
+                  </form>
                 </div>
+                
               </div>
               <!-- <div class="direct-chat-contacts">
+                  
               </div> -->
+              
           </div>
       <!-- </div> -->
   </div>

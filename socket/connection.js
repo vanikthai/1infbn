@@ -37,6 +37,10 @@ module.exports = (socket) => {
     user_profileUsername(username);
   });
 
+  socket.on("eidtuserpassword", (payload) => {
+    eidtuserpassword(payload);
+  });
+
   socket.on("mainpage", (message) => {
     addtomainpage(message);
   });
@@ -126,17 +130,17 @@ module.exports = (socket) => {
       .then((res) => {
         socket.emit("mainpage", res);
         let payload = {
-            index: res.insertId,
-            vlock: "allow",
-            ...msg 
-        }
+          index: res.insertId,
+          vlock: "allow",
+          ...msg,
+        };
         socket.broadcast.emit("mainserver", payload);
       })
       .catch((err) => {
         socket.emit("server_error", err + sql);
       });
   }
-  
+
   function adddiscrip(discrip) {
     let sql = `INSERT INTO discrips (discrip,keyword) VALUE ('${discrip.discrip}','${discrip.keyword}')`;
     mysql(sql)
@@ -301,6 +305,45 @@ module.exports = (socket) => {
       .catch((err) => {
         socket.emit("server_msg", { res: err, msg: sql });
       });
+  }
+
+  function eidtuserpassword(user) {
+    function cheekpassword() {
+      let sql = `SELECT password from  users  WHERE id_user = '${user.id}'`;
+      mysql(sql)
+        .then((res) => {
+          let pass = res[0].password;
+          const match = passhash.verify(user.pass1, pass);
+          if (match) {
+            updatepassword();
+          } else {
+            socket.emit("server_msg", {
+              res: "changpassword",
+              msg: "nomatch",
+            });
+          }
+        })
+        .catch((err) => {
+          socket.emit("server_msg", { res: err, msg: sql });
+        });
+    }
+
+    function updatepassword() {
+      let hash = passhash.generate(user.pass2);
+      let sql = `UPDATE users  SET password='${hash}' WHERE id_user = '${user.id}'`;
+      mysql(sql)
+        .then(() => {
+          socket.emit("server_msg", {
+            res: "changpassword",
+            msg: "passChanged",
+          });
+        })
+        .catch((err) => {
+          socket.emit("server_msg", { res: err, msg: sql });
+        });
+    }
+
+    cheekpassword();
   }
 
   async function disconnecting() {

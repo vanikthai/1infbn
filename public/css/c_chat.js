@@ -437,7 +437,7 @@ body{
     -o-transform: translate(0,  0);
     transform: translate(0,  0);
     padding: 10px;
-    height: 350px;
+    height: 100vh;
     overflow: auto;
 }
 .direct-chat-msg, .direct-chat-text {
@@ -644,6 +644,6 @@ body{
     border-left-color: #00a65a;
 }
 </style>
-`
+`;
 
-export default chat
+export default chat;

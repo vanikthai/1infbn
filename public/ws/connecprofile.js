@@ -8,8 +8,8 @@ export default () => {
   socket.on("connect", () => {
     connecedstart();
   });
+
   socket.on("server_msg", (msg) => {
-    console.log(msg);
     switch (msg.res) {
       case "username":
         restart();
@@ -17,6 +17,16 @@ export default () => {
       case "picture":
         restart();
         break;
+      case "changpassword":
+        if (msg.msg === "nomatch") showtose("รหัสผ่านไม่ตรงกัน", username);
+        if (msg.msg === "passChanged") {
+          showtose("ได้เปลี่ยนรหัสป่านเรียบร้อยแล้ว", username);
+          document.getElementById("epass1").value = "";
+          document.getElementById("epass2").value = "";
+        }
+        break;
+      default:
+        console.log(msg);
     }
   });
   socket.on("connect", () => {
@@ -28,10 +38,22 @@ export default () => {
   });
 
   ///////////////uploadpic/////////////////////////
-  
+
   document.getElementById("movehome").addEventListener("click", (e) => {
     window.location.href = "https://www.1inf.vanikthai.com";
- });
+  });
+
+  document.getElementById("editpass").addEventListener("submit", (e) => {
+    e.preventDefault();
+    let payload = {
+      id: idb,
+      pass1: document.getElementById("epass1").value,
+      pass2: document.getElementById("epass2").value,
+    };
+    if (payload.pass1 === "" || payload.pass2 === "") return;
+    console.log(payload);
+    socket.emit("eidtuserpassword", payload);
+  });
 
   document.getElementById("editusername").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -44,9 +66,17 @@ export default () => {
     console.log(payload);
     socket.emit("editProfileUsername", payload);
   });
+
   document
     .getElementById("setprofilepic")
     .addEventListener("change", handleProfilePicture, false);
+  //////////////////////////////////////////////////////////////////
+
+  function showtose(msg, usname) {
+    document.getElementById("tosehead").innerText = usname;
+    document.getElementById("tosebody").innerHTML = msg;
+    new bootstrap.Toast(document.querySelector("#basicToast")).show();
+  }
 
   function handleProfilePicture(e) {
     if (!this.files.length) return;

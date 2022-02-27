@@ -1,18 +1,14 @@
 window.addEventListener("load", function () {
-  function offOnlineStatus(event) {
-    document.write(`offline`)
-    window.addEventListener("online", OnlineStatus);
-
-  }
-  function OnlineStatus(event) {
-    window.setTimeout(() => {
-      window.location.href = "https://www.1inf.vanikthai.com";
-     // window.location.reload(true);  
-     // alert("reload");
-    }, 200);
-  }
- // window.addEventListener("online", OnlineStatus);
-  window.addEventListener("offline", offOnlineStatus);
+  //   function offOnlineStatus(event) {
+  //     document.write(`offline`);
+  //     window.addEventListener("online", OnlineStatus);
+  //   }
+  //   function OnlineStatus(event) {
+  //     window.setTimeout(() => {
+  //       window.location.href = "https://www.1inf.vanikthai.com";
+  //     }, 200);
+  //   }
+  // window.addEventListener("offline", offOnlineStatus);
   settingStart();
 });
 
@@ -39,6 +35,3 @@ function settingStart() {
     });
   }
 }
-
-
-
